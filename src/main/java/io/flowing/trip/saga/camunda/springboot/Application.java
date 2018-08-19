@@ -7,14 +7,10 @@ import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.h2.tools.Server;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@EnableAutoConfiguration
 @EnableProcessApplication
-@ComponentScan
 public class Application {
 
   public static void main(String... args) throws Exception {
@@ -22,7 +18,7 @@ public class Application {
 
     // do default setup of platform (everything is only applied if not yet there)
     ProcessEngine engine = BpmPlatform.getDefaultProcessEngine();
-    
+
     // start a Saga right away
     engine.getRuntimeService().startProcessInstanceByKey(
         "trip", 
