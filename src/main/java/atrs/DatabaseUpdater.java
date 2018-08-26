@@ -1,23 +1,21 @@
 package atrs;
 
+import atrs.model.TrxValidationResult;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.variable.value.TypedValue;
 
+import java.util.List;
 import java.util.Map;
 
 public class DatabaseUpdater implements JavaDelegate {
 
     @Override
-    public void execute(DelegateExecution delegateExecution) throws Exception {
+    public void execute(DelegateExecution execution) throws Exception {
         System.err.println("--> DatabaseUpdater");
 
-        System.err.println(delegateExecution);
 
-        Map<String, Object> variables = delegateExecution.getVariables();
-        System.err.println(String.valueOf(variables));
-
-        Application.ATRSTransaction trx = (Application.ATRSTransaction) delegateExecution.getVariable("trx");
+        List<TrxValidationResult> trxValidationResults = (List<TrxValidationResult>) execution.getVariable("trxValidationResults");
+        System.err.println(trxValidationResults);
 
         System.err.println("<-- DatabaseUpdater");
     }

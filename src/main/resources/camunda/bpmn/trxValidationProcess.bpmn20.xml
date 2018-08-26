@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_11ppow4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.16.2">
+  <bpmn:process id="trxValidationProcess" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Transactions imported">
+      <bpmn:outgoing>SequenceFlow_008oxtb</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:businessRuleTask id="Task_0iw25jp" name="Validate Transactions" camunda:resultVariable="result" camunda:decisionRef="generateResults" camunda:mapDecisionResult="singleResult">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="atrs.ValidationListener" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1vwcmo4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1xbh9wg</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="transactions" camunda:elementVariable="trx" />
+    </bpmn:businessRuleTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1xbh9wg" sourceRef="Task_0iw25jp" targetRef="Task_01btko0" />
+    <bpmn:endEvent id="EndEvent_0evvfl9" name="Transactions validated">
+      <bpmn:incoming>SequenceFlow_0czlkv0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0czlkv0" sourceRef="Task_01btko0" targetRef="EndEvent_0evvfl9" />
+    <bpmn:serviceTask id="Task_01btko0" name="Update Database" camunda:class="atrs.DatabaseUpdater">
+      <bpmn:incoming>SequenceFlow_1xbh9wg</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0czlkv0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_008oxtb" sourceRef="StartEvent_1" targetRef="Task_09m8jn2" />
+    <bpmn:sequenceFlow id="SequenceFlow_1vwcmo4" sourceRef="Task_09m8jn2" targetRef="Task_0iw25jp" />
+    <bpmn:serviceTask id="Task_09m8jn2" name="Collect Transactions" camunda:class="atrs.TransactionCollector">
+      <bpmn:incoming>SequenceFlow_008oxtb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1vwcmo4</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="trxValidationProcess">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="45" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="32" y="145" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BusinessRuleTask_0ivs9lk_di" bpmnElement="Task_0iw25jp">
+        <dc:Bounds x="400" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1xbh9wg_di" bpmnElement="SequenceFlow_1xbh9wg">
+        <di:waypoint x="500" y="120" />
+        <di:waypoint x="619" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0evvfl9_di" bpmnElement="EndEvent_0evvfl9">
+        <dc:Bounds x="849" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="836" y="145" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0czlkv0_di" bpmnElement="SequenceFlow_0czlkv0">
+        <di:waypoint x="719" y="120" />
+        <di:waypoint x="849" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1sifwvj_di" bpmnElement="Task_01btko0">
+        <dc:Bounds x="619" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_008oxtb_di" bpmnElement="SequenceFlow_008oxtb">
+        <di:waypoint x="81" y="120" />
+        <di:waypoint x="194" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1vwcmo4_di" bpmnElement="SequenceFlow_1vwcmo4">
+        <di:waypoint x="294" y="120" />
+        <di:waypoint x="400" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_04ll86f_di" bpmnElement="Task_09m8jn2">
+        <dc:Bounds x="194" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" id="transactionDecisions" name="Transaction Decisions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="marketDecision" name="Market">
+    <extensionElements>
+      <biodi:bounds x="392" y="386" width="180" height="80" />
+      <biodi:edge source="InputData_0bjmh3o">
+        <biodi:waypoints x="358" y="522" />
+        <biodi:waypoints x="457" y="466" />
+      </biodi:edge>
+    </extensionElements>
+    <informationRequirement>
+      <requiredInput href="#InputData_0bjmh3o" />
+    </informationRequirement>
+    <decisionTable id="decisionTable" hitPolicy="FIRST">
+      <input id="input_1">
+        <inputExpression id="inputExpression_1" typeRef="string">
+          <text>${trx.market}</text>
+        </inputExpression>
+      </input>
+      <output id="output_1" label="marketValid" name="marketValid" typeRef="boolean" />
+      <output id="OutputClause_0ktdlyr" label="marketReason" name="marketReason" typeRef="string" />
+      <rule id="DecisionRule_1fewavs">
+        <inputEntry id="UnaryTests_0kxkxmq">
+          <text>"CH"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0zlozzw">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0zaqg1u">
+          <text></text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0qaajyw">
+        <inputEntry id="UnaryTests_05yclvt">
+          <text>"DE"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0q4fcfw">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_18vfjpf">
+          <text></text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ri31h7">
+        <inputEntry id="UnaryTests_0owish2">
+          <text>"AT"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0i6hvwa">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1lz6z2c">
+          <text></text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1syz2gl">
+        <inputEntry id="UnaryTests_1wddwy4" expressionLanguage="feel">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1wv1a1m">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1dqojih">
+          <text>"market is not supported"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="dttRateDecision" name="DTT Rate">
+    <extensionElements>
+      <biodi:bounds x="789" y="382" width="180" height="80" />
+      <biodi:edge source="marketDecision">
+        <biodi:waypoints x="572" y="388" />
+        <biodi:waypoints x="954" y="400" />
+      </biodi:edge>
+      <biodi:edge source="InputData_02ldang">
+        <biodi:waypoints x="992" y="515" />
+        <biodi:waypoints x="933" y="462" />
+      </biodi:edge>
+    </extensionElements>
+    <informationRequirement>
+      <requiredInput href="#InputData_02ldang" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1hn6plu">
+      <input id="InputClause_0pthnp6">
+        <inputExpression id="LiteralExpression_0ug8ha1" typeRef="integer">
+          <text>${trx.dttRate}</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_176j2c3" name="dttRateValid" typeRef="boolean" />
+      <output id="OutputClause_1pzgv0c" name="dttRateReason" typeRef="string" />
+      <rule id="DecisionRule_0he4qzr">
+        <inputEntry id="UnaryTests_17eu76q">
+          <text>&gt;= 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_15g2yb4">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1cwi34c">
+          <text></text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1hwrda6">
+        <inputEntry id="UnaryTests_04ofy04">
+          <text>&lt; 0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0tr0ubq">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0efwf5n">
+          <text>"dtt rate is shit"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0bjmh3o" name="market">
+    <extensionElements>
+      <biodi:bounds x="264" y="522" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <inputData id="InputData_02ldang" name="dttRate">
+    <extensionElements>
+      <biodi:bounds x="952" y="515" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <decision id="generateResults" name="GenerateResults">
+    <extensionElements>
+      <biodi:bounds x="596" y="173" width="180" height="80" />
+      <biodi:edge source="dttRateDecision">
+        <biodi:waypoints x="934" y="382" />
+        <biodi:waypoints x="761" y="253" />
+      </biodi:edge>
+      <biodi:edge source="marketDecision">
+        <biodi:waypoints x="527" y="386" />
+        <biodi:waypoints x="640" y="253" />
+      </biodi:edge>
+    </extensionElements>
+    <informationRequirement>
+      <requiredDecision href="#dttRateDecision" />
+    </informationRequirement>
+    <informationRequirement>
+      <requiredDecision href="#marketDecision" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_00fhc5d" hitPolicy="FIRST">
+      <input id="InputClause_1kqq0fb">
+        <inputExpression id="LiteralExpression_1mm7jqh" typeRef="boolean">
+          <text>${marketValid}</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0fqu208">
+        <inputExpression id="LiteralExpression_0mpwr5i" typeRef="boolean">
+          <text>${dttRateValid}</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0eeqgq8" name="valid" typeRef="string" />
+      <output id="OutputClause_0na983f" name="reason" typeRef="string" />
+      <rule id="DecisionRule_1hiuesi">
+        <inputEntry id="UnaryTests_0n33qo2">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0rva1ew">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1txtsjb">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0t7xtww">
+          <text>${marketReason}</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1qer5w7">
+        <inputEntry id="UnaryTests_0bl646h">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_14e4v50">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_10a7e1t">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_189g1sn">
+          <text>${dttRateReason}</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_09dta4o">
+        <inputEntry id="UnaryTests_12npzyy">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1raq09p">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0zftqjs">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1sx3z5d">
+          <text></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
